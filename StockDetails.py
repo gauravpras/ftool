@@ -1,32 +1,37 @@
 import requests
+import matplotlib.pyplot as plt
+import pandas as pd
 from Api_key2 import Api_Key2  
  # Import the API key 
+class StockAnalysis:
+    def __init__(self, symbol):
+        self.symbol = symbol.upper()  
+        self.api_key = Api_Key2 
+        self.company_name = "N/A"
+        self.market_exchange = "N/A"
+        self.trading_currency = "N/A"
+        self.current_price = "N/A"
+        self.historical_data = None
 
-class StockDetails:
-    def __init__(self, stock_symbol):
-        "Use stock symbol and get details using Polygon"
-        self.symbol = stock_symbol.upper()
-        self.api_key = Api_Key2
-        self.company = None
-        self.trading_exchange = None
-        self.latest_price = None
-        self.trading_currency = None
-        self.retrieve_stock_data()
+ # get company details like name and exchange
+    def get_company_details(self):
+        url = f"https://api.polygon.io/v3/reference/tickers/{self.symbol}?apiKey={self.api_key}"
+        print(f"Fetching company details from: {url}")
+        response = requests.get(url)
+        data = response.json()
+        details = data.get("results", {})
+        self.company_name = details.get("name", self.company_name)
+        self.market_exchange = details.get("primary_exchange", self.market_exchange)
+        self.trading_currency = details.get("currency_name", self.trading_currency)
 
-    def retrieve_stock_data(self):
-        "Get company name, exchange, and currency using Polygon"
-        details_url = f"https://api.polygon.io/v3/reference/tickers/{self.symbol}?apiKey={self.api_key}"
-        response = requests.get(details_url)
-        if response.status_code == 200:
-            data = response.json().get("results", {})
-            self.company = data.get("name", "Not Available")
-            self.trading_exchange = data.get("primary_exchange", "Not Available")
-            self.trading_currency = data.get("currency_name", "Not Available")
-        else:
-            print(f"Failed to fetch details for {self.symbol}. Check the symbol or API key.")
-            self.company = "Not Available"
-            self.trading_exchange = "Not Available"
-            self.trading_currency = "Not Available"
+ # get the latest stock price
+    def get_latest_stock_price(self):
+        url = f"https://api.polygon.io/v2/last/trade/{self.symbol}?apiKey={self.api_key}"
+        print(f"Fetching latest stock price from: {url}")
+        response = requests.get(url)
+        data = response.json()
+        price_info = data.get("results", {})
+        self.current_price = price_info.get("p", self.current_price)
 
-        #latest price
-        self.retrieve_stock_price()
+
+   
