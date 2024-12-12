@@ -1,8 +1,8 @@
 import requests
-import matplotlib.pyplot as plt
 import pandas as pd
-from Api_key2 import Api_Key2  
- # Import the API key 
+import matplotlib.pyplot as plt
+from Api_key2 import Api_Key2 
+
 class StockAnalysis:
     def __init__(self, symbol):
         self.symbol = symbol.upper()  
@@ -12,26 +12,52 @@ class StockAnalysis:
         self.trading_currency = "N/A"
         self.current_price = "N/A"
         self.historical_data = None
+  
 
- # get company details like name and exchange
     def get_company_details(self):
-        url = f"https://api.polygon.io/v3/reference/tickers/{self.symbol}?apiKey={self.api_key}"
-        print(f"Fetching company details from: {url}")
+        url = "https://api.polygon.io/v3/reference/tickers/" + self.symbol + "?apiKey=" + self.api_key
         response = requests.get(url)
-        data = response.json()
-        details = data.get("results", {})
-        self.company_name = details.get("name", self.company_name)
-        self.market_exchange = details.get("primary_exchange", self.market_exchange)
-        self.trading_currency = details.get("currency_name", self.trading_currency)
+        if response.status_code == 200:
+            data = response.json()
+            details = data.get("results", {})
+            self.company_name = details.get("name", self.company_name)
+            self.market_exchange = details.get("primary_exchange", self.market_exchange)
+            self.trading_currency = details.get("currency_name", self.trading_currency)
+        else:
+            print("Error getting company details\n")
 
- # get the latest stock price
     def get_latest_stock_price(self):
-        url = f"https://api.polygon.io/v2/last/trade/{self.symbol}?apiKey={self.api_key}"
-        print(f"Fetching latest stock price from: {url}")
+        url = "https://api.polygon.io/v2/aggs/ticker/" + self.symbol + "/prev?adjusted=true&apiKey=" + self.api_key
         response = requests.get(url)
-        data = response.json()
-        price_info = data.get("results", {})
-        self.current_price = price_info.get("p", self.current_price)
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get("results", [{}])[0]
+            self.current_price = results.get("c", self.current_price)  
+        else:
+            print("Error getting stock price\n")
 
-
-   
+    def fetch_historical_data(self, start_date, end_date):
+ 
+        url = (
+            "https://api.polygon.io/v2/aggs/ticker/" + self.symbol + "/range/1/day/"
+            + start_date + "/" + end_date + "?adjusted=true&sort=asc&apiKey=" + self.api_key
+        )
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get("results", [])
+            if results:
+                self.historical_data = pd.DataFrame(results)
+                self.historical_data["Date"] = pd.to_datetime(self.historical_data["t"], unit="ms")
+                self.historical_data.rename(
+                    columns={"c": "Close", "h": "High", "l": "Low", "o": "Open", "v": "Volume"},
+                    inplace=True
+                )
+                return True
+            else:
+                print("No data available for the date range\n")
+                return False
+        else:
+            print("Error getting historical data\n")
+            return False
+#goig to finsih tommorow
