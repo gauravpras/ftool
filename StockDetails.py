@@ -60,4 +60,24 @@ class StockAnalysis:
         else:
             print("Error getting historical data\n")
             return False
-#goig to finsih tommorow
+
+    def plot_close_prices(self):
+        if self.historical_data is not None:
+            plt.figure(figsize=(10, 5))
+            plt.plot(self.historical_data["Date"], self.historical_data["Close"], label="Close Price")
+            plt.title(self.symbol + " Closing Prices")
+            plt.xlabel("Date")
+            plt.ylabel("Price (USD)")
+            plt.legend()
+            plt.grid()
+            plt.show()
+        else:
+            print("No historical data to plot\n")
+
+    def show_stock_summary(self):
+        print("\nStock Summary")
+        print("Company Name: " + self.company_name)
+        print("Ticker: " + self.symbol)
+        print("Exchange: " + self.market_exchange)
+        print("Currency: " + self.trading_currency)
+        print("Latest Price: $" + str(self.current_price))
