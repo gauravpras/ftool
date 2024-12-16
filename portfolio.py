@@ -73,3 +73,37 @@ class Portfolio:
             for stock in self.stocks.values()
         )
         return total_value
+    def calc_dividend_income(self):
+        total_income = 0
+        for stock in self.stocks.values():
+            for dividend in stock["Dividends"]:
+                total_income += dividend.get("cash_amount", 0) * stock["Shares"]
+        return total_income
+    def portfolio_visualization(self):
+        tickers = list(self.stocks.keys())
+        values = [
+            stock["Shares"] * (stock["Current Price"] if stock["Current Price"] != "N/A" else 0)
+            for stock in self.stocks.values()
+        ]
+        if not any(values):
+            print("No valid market values to display.")
+            return
+        plt.figure(figsize=(10, 8))
+        plt.pie(values, labels=tickers, autopct="%1.1f%%", startangle=140)
+        plt.title("Portfolio Market Value Distribution")
+        plt.show()
+    def portfolio_display(self):
+        portfolio_data = []
+        for ticker, stock in self.stocks.items():
+            market_value = stock["Shares"] * (stock["Current Price"] if stock["Current Price"] != "N/A" else 0)
+            portfolio_data.append({
+                "Ticker": ticker,
+                "Company Name": stock["Company Name"],
+                "Shares": stock["Shares"],
+                "Current Price": stock["Current Price"],
+                "Market Value": market_value
+            })
+        df = pd.DataFrame(portfolio_data)
+        print(df)
+        print(f"\nTotal Market Value: ${self.calc_market_value():,.2f}")
+        print(f"Total Dividend Income: ${self.calc_dividend_income():,.2f}")
