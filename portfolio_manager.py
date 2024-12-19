@@ -5,7 +5,7 @@ from Api_key3 import Api_Key3
 
 
 class PortfolioManager:
-    def _init_(self):
+    def __init__(self):
         self.api_key = Api_Key3
         self.stocks = {}
 
