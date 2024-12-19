@@ -6,7 +6,7 @@ F Tool is an application designed to help investors track dividend-paying stocks
 Features
 Real-Time Data: Automatically fetch stock and dividend details using the Polygon.io API.
 Portfolio Management: Add stocks, track their performance, and calculate total income projections.
-Dividend Insights: View dividend history, current stock prices, and reinvestment growth estimates.
+Dividend Insights: View dividend history and current stock prices.
 Visualizations: Generate clear and simple charts to show dividend trends and portfolio allocations.
 
 Requirements
@@ -50,5 +50,3 @@ Add stocks to your portfolio, Fetch stock and dividend information, View visuali
 
 How It Works
 F Tool connects to the Polygon.io API to gather real-time stock and dividend data. It retrieves information such as company names, stock prices, and dividend payouts. This data is used to calculate the total value of your portfolio and create charts that help visualize your portfolio’s performance and dividend trends.
-
-Future Enhancements: Add features for tracking financial metrics like earnings and P/E ratios, Improve the reinvestment calculator for more accurate growth predictions, Build a web-based version for easier access and usability.
