@@ -1,4 +1,7 @@
 # ftool
+
+Tool Demo/Presentation: https://youtu.be/yV3g6xnkdb0 
+
 Financial Tracking Tool
 What is F Tool?
 F Tool is an application designed to help investors track dividend-paying stocks and manage their investment portfolios. It simplifies the process of analyzing stocks, tracking dividend income, and visualizing portfolio performance. With real-time stock data and intuitive visualizations, F Tool makes it easier for investors to make informed decisions.
@@ -50,3 +53,5 @@ Add stocks to your portfolio, Fetch stock and dividend information, View visuali
 
 How It Works
 F Tool connects to the Polygon.io API to gather real-time stock and dividend data. It retrieves information such as company names, stock prices, and dividend payouts. This data is used to calculate the total value of your portfolio and create charts that help visualize your portfolio’s performance and dividend trends.
+
+
